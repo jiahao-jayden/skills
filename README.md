@@ -35,7 +35,7 @@
 
 ```
 <repo>/.jnative/
-├── CONTEXT.md                # 在做的特性引入的新术语
+├── CONTEXT.md                # 项目术语表,共识对齐用
 └── <slug>/
     ├── intent.md             # 问题、期望结果、影响范围、边界
     ├── plan.md               # 背景、方案、硬约束、验收计划
