@@ -13,6 +13,8 @@ disable-model-invocation: true
 ```
 <repo>/.jnative/
 ├── CONTEXT.md                # 项目术语表,共识对齐用
+├── research/                 # 调研笔记,跨特性共用
+│   └── <topic>.md
 └── <slug>/                   # 一个特性,slug 短横线小写、取自意图、不带日期
     ├── intent.md
     ├── plan.md
@@ -65,6 +67,22 @@ _Avoid_: <该避免的同义词>
 不缓存。需要时现查:读子包 `package.json` 的 `scripts`,或用项目约定文件里记录的命令。
 
 环境本身就是真相源,复述它只会过期。monorepo 的根目录常常没有聚合脚本,那就按 spec 触及的 workspace 逐个跑。某个包没有 test 脚本就只跑类型检查,并在验收里注明。**不要编一条跑不通的命令**,那会让验证门禁静默失效。
+
+## 调研
+
+事实落在仓库之外时(第三方库怎么实现、协议怎么定义、别的项目怎么解决同一问题),调用 Skill 工具传 `research`,把它产出的笔记落到 `.jnative/research/<topic>.md`。
+
+`<topic>` 按题目命名,不带特性 slug——调研跨特性复用,一份 ACP 协议的笔记不该绑死在某个特性下面。
+
+**落盘后一定要从工件链回去。** 在 intent 的「既定前提」或 plan 的「方案」里,写明这条结论来自哪份笔记:
+
+```markdown
+- Connector 的 Action 契约按 provider 定义生成([调研](../research/open-connector-actions.md))
+```
+
+不链回去,这份调研就只在当时那次对话里起过作用。下一个 session 读 intent 时看到一条结论,不知道它是查证过的还是拍脑袋的,于是要么重查一遍,要么当成假设继续用。
+
+已有笔记覆盖了当前问题就直接引用,不要重查。重查的成本不只是时间,还会得到一份和旧笔记结论不一致的新笔记。
 
 ## 定位
 

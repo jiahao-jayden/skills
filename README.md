@@ -21,7 +21,7 @@
 
 ## 调研:research
 
-针对一个问题追到一手来源,产出带引证、可复核的 markdown 笔记。独立于 `jn` 使用,`jn-grilling` 在事实落在仓库之外时也会调它。
+针对一个问题追到一手来源,产出带引证、可复核的 markdown 笔记。独立于 `jn` 使用,`jn-grilling` 在事实落在仓库之外时也会调它;走流程时笔记落到 `.jnative/research/`,并从 intent 或 plan 里链回去。
 
 三条核心规则:
 
@@ -36,6 +36,7 @@
 ```
 <repo>/.jnative/
 ├── CONTEXT.md                # 项目术语表,共识对齐用
+├── research/                 # 调研笔记,跨特性共用
 └── <slug>/
     ├── intent.md             # 问题、期望结果、影响范围、边界
     ├── plan.md               # 背景、方案、硬约束、验收计划
