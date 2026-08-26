@@ -19,6 +19,18 @@
 
 各阶段只产内容,不知道文件存哪。单独调用时产出留在对话里;要落盘走 `/jn`。
 
+## 调研:research
+
+针对一个问题追到一手来源,产出带引证、可复核的 markdown 笔记。独立于 `jn` 使用,`jn-grilling` 在事实落在仓库之外时也会调它。
+
+三条核心规则:
+
+- **按规模定投入。** 单点查证不派 subagent;对比方案派 2-4 个;摸清整套协议派 4 个以上。给简单问题派一堆 subagent 是这类任务最常见的浪费
+- **一手来源。** 第三方博客用来发现线索,不用来支撑结论。搜索排名不等于可信度
+- **把版本钉死。** 源码记 commit SHA,引用用带 SHA 和行号的 permalink;文档记版本号或访问日期。不钉版本,结论过几周就无法复核
+
+产出结构是结论先行:`## 结论`(编号、自足)→ `## 证据`(每节末尾带来源链接)→ `## 对本项目的影响`。
+
 ### 工件
 
 ```
@@ -95,3 +107,5 @@ done
 ## 致谢
 
 流程设计参考了 [mattpocock/skills](https://github.com/mattpocock/skills) 的调用轴模型(user-invoked 与 model-invoked 的分工)、grilling 的 design tree / frontier 结构,以及 Anthropic 的 [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) 的工件链思路。
+
+`research` 的规模分级、派活四要素和先宽后窄的检索策略来自 Anthropic 的 [How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system);笔记结构与版本钉死的做法来自自己既有的调研实践。
