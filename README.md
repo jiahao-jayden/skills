@@ -1,5 +1,7 @@
 # skills
 
+[![skills.sh](https://skills.sh/b/jiahao-jayden/skills)](https://skills.sh/jiahao-jayden/skills)
+
 个人 agent skills,用于 Claude Code 和 Codex。
 
 ## 流程:jn
@@ -46,6 +48,27 @@
 ## 安装
 
 ```bash
+npx skills@latest add jiahao-jayden/skills
+```
+
+支持 Claude Code、Codex、Cursor、Copilot 等二十余种 agent,安装时可选装哪几个 skill、装到哪些 agent。
+
+常用参数:
+
+| 参数 | 作用 |
+|---|---|
+| `-l` | 只列出仓库里有哪些 skill,不安装 |
+| `-g` | 装到用户级而非项目级 |
+| `-s <名字>` | 只装指定的几个(`*` 表示全部) |
+| `-a <agent>` | 指定装到哪些 agent(`*` 表示全部) |
+| `--copy` | 复制文件,而不是符号链接到 agent 目录 |
+
+更新用 `npx skills update`,查看已装用 `npx skills list`。
+
+<details>
+<summary>或者直接 clone 并自己做符号链接</summary>
+
+```bash
 git clone git@github.com:jiahao-jayden/skills.git ~/skills
 for s in ~/skills/*/; do
   ln -sfn "$s" ~/.claude/skills/$(basename "$s")   # Claude Code
@@ -53,7 +76,9 @@ for s in ~/skills/*/; do
 done
 ```
 
-符号链接指回仓库,`git pull` 即更新。
+符号链接指回仓库,`git pull` 即更新。要改这些 skill 就用这种方式。
+
+</details>
 
 ## 致谢
 
