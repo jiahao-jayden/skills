@@ -63,7 +63,19 @@ npx skills@latest add jiahao-jayden/skills
 | `-a <agent>` | 指定装到哪些 agent(`*` 表示全部) |
 | `--copy` | 复制文件,而不是符号链接到 agent 目录 |
 
-更新用 `npx skills update`,查看已装用 `npx skills list`。
+其他命令(`skills.sh` 的文档页只写了 `add`,以下来自 `npx skills --help`):
+
+| 命令 | 作用 |
+|---|---|
+| `list` / `ls` | 列出已安装的 skill |
+| `update [skills...]` | 更新到最新版(`-g` 只更新全局,`-p` 只更新项目) |
+| `remove [skills]` | 卸载 |
+| `find [query]` | 交互式搜索 skill(`--owner` 限定某个 GitHub 用户) |
+| `use <pkg>@<skill>` | 不安装,只生成使用该 skill 的 prompt |
+| `experimental_install` | 从 `skills-lock.json` 还原全部依赖 |
+| `init [name]` | 新建一个 skill 骨架 |
+
+安装信息记在项目的 `skills-lock.json` 里,带来源和内容哈希,可以随代码一起提交。
 
 <details>
 <summary>或者直接 clone 并自己做符号链接</summary>
