@@ -21,7 +21,7 @@
 
 ## 调研:research
 
-针对一个问题追到一手来源,产出带引证、可复核的 markdown 笔记。独立于 `jn` 使用,`jn-grilling` 在事实落在仓库之外时也会调它;走流程时笔记落到 `.jnative/research/`,并从 intent 或 plan 里链回去。
+针对一个问题追到一手来源，产出带引证、可复核的 Markdown 笔记。需要讲清复杂关系、流程、时间变化或多方案比较时，会额外生成同名的 HTML 报告：页面用 Tailwind CDN 排版，关系图用内嵌 SVG，结论逐条链接回证据。独立于 `jn` 使用，`jn-grilling` 在事实落在仓库之外时也会调它；走流程时笔记落到 `.jnative/research/`，并从需求说明或计划里链回去。
 
 三条核心规则:
 
