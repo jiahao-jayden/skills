@@ -21,15 +21,16 @@
 
 ## 调研:research
 
-针对一个问题追到一手来源，产出带引证、可复核的 Markdown 笔记。需要讲清复杂关系、流程、时间变化或多方案比较时，会额外生成同名的 HTML 报告：页面用 Tailwind CDN 排版，关系图用内嵌 SVG，结论逐条链接回证据。独立于 `jn` 使用，`jn-grilling` 在事实落在仓库之外时也会调它；走流程时笔记落到 `.jnative/research/`，并从需求说明或计划里链回去。
+针对一个问题追到一手来源，产出不离开笔记就能复核的 Markdown：每处引证都是链接加原文摘录（源码片段或文档原句），固定一张「来源覆盖」表交代官方文档、作者本人说法、同类方案、issue 讨论和历史演变各查到了什么。机制类问题要求具体走一遍的 trace 和失败模式，对比类要求反方证据，可行性类要求真跑并贴命令输出。需要讲清复杂关系、流程、时间变化、多方案比较或 GitHub issue 讨论时，会额外生成同名的 HTML 报告。HTML 给所有人看，包括不写代码的人，分两层：上层是解释层，每一节按「一句话说清是什么 → 日常类比 → 展开 → 对我们意味着什么」写，术语第一次出现就标出并链到页尾术语表；下层是证据层，把 Markdown 的全部章节、表格、摘录、链接折叠在对应章节下面。页面用 Tailwind CDN 排版，带目录，图放在它解释的章节里，图上的标签用人话。`check_note.py` 检查笔记的结构和摘录，`check_report.py --note` 对照 Markdown 检查 HTML 没有丢内容，并检查每节有人话解释、每个术语有定义。GitHub issue 会区分维护者确认、具体复现案例和普通用户反馈，不把评论数量或表情反应伪装成普遍结论。独立于 `jn` 使用，`jn-grilling` 在事实落在仓库之外时也会调它；走流程时笔记落到 `.jnative/research/`，并从需求说明或计划里链回去。
 
-三条核心规则:
+四条核心规则:
 
-- **按规模定投入。** 单点查证不派 subagent;对比方案派 2-4 个;摸清整套协议派 4 个以上。给简单问题派一堆 subagent 是这类任务最常见的浪费
-- **一手来源。** 第三方博客用来发现线索,不用来支撑结论。搜索排名不等于可信度
+- **按完成标准收敛，不按次数封顶。** 单点查证派 1 个 subagent;机制类、对比类、架构类按子系统或方案切分，并固定多派一个只查来源面(同类方案、作者说法、issue、历史)的 subagent。表里的工具调用数是下限，subagent 什么时候停看它负责的部分有没有达到完成标准
+- **一手来源。** 第三方博客用来发现线索,不用来支撑结论。作者或维护者本人的博客、演讲、issue 回复算一手来源。搜索排名不等于可信度
+- **链接加摘录。** 链接负责定位，摘录负责证明：源码引 5–15 行代码块，文档引原句。没有摘录的主张进不了结论，只能进「待验证」
 - **把版本钉死。** 源码记 commit SHA,引用用带 SHA 和行号的 permalink;文档记版本号或访问日期。不钉版本,结论过几周就无法复核
 
-产出只固定两头:**结论在最前**(编号、自足),**影响在最后**。中间按题目自己命名章节,数量随主题而定。多方案对比、逐维差距、能力矩阵用表格,维度做行、方案做列,单元格里直接嵌带 SHA 的证据链接。
+产出固定三处:**结论在最前**(编号、自足),**来源覆盖在影响之前**(五行固定的表),**影响在最后**。中间按题目自己命名章节,数量随主题而定。多方案对比、逐维差距、能力矩阵用表格,维度做行、方案做列,单元格里直接嵌带 SHA 的证据链接。
 
 ### 工件
 
@@ -116,4 +117,4 @@ done
 
 流程设计参考了 [mattpocock/skills](https://github.com/mattpocock/skills) 的调用轴模型(user-invoked 与 model-invoked 的分工)、grilling 的 design tree / frontier 结构,以及 Anthropic 的 [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) 的工件链思路。
 
-`research` 的规模分级、派活四要素和先宽后窄的检索策略来自 Anthropic 的 [How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system);笔记结构与版本钉死的做法来自自己既有的调研实践。
+`research` 的规模分级、派活要素和先宽后窄的检索策略来自 Anthropic 的 [How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system);笔记结构、摘录式引证、来源覆盖表与版本钉死的做法来自自己既有的调研实践;HTML 解释层的「是什么 → 类比 → 展开 → 对你意味着什么」结构和零未定义术语的要求参考了 [dreambigou/eli5](https://github.com/dreambigou/eli5)。
