@@ -6,22 +6,46 @@
 
 ## 流程:jn
 
-一套需求流程，把想法整理成可执行的工作项，文件保存在项目的 `.jnative/` 目录。
+用 GitHub Issues 管理需求和实施：**Grill → PRD → 子 Issues 与依赖 → Implement → Review**。一项任务也走同样的流程。
 
-只需要记住 `/jn`,它读 `.jnative/` 判断当前在哪一步,再交给对应阶段。
+`/jn` 接受父或子 Issue 链接、编号，读取需求、确认和进度，再恢复对应阶段。父 Issue 保存 RFC 格式 PRD；子 Issue 保存任务、执行信息和检查证据。GitHub 是任务状态的唯一来源，不再生成本地 intent/plan/todo/spec。
 
-| skill | 调用 | 职责 |
+| skill | 职责 | 单独调用 |
 |---|---|---|
-| `jn` | 手动 | 流程入口：找到当前需求、保存文件、更新进度 |
-| `jn-intent` | 自动 / 手动 | 通过成批提问，把模糊想法整理成需求说明 |
-| `jn-plan` | 自动 / 手动 | 拆成计划、工作清单和一组能分别检查的工作项（spec） |
-| `jn-grilling` | 自动 / 手动 | 成批提问：每题给选项、各自会带来的结果和推荐理由 |
+| `jn` | Issue 定位、发布、确认、实施调度和整体验收 | 手动入口 |
+| `jn-grilling` | 分轮追问场景、边界和重要取舍 | 交付决定清单 |
+| `jn-intent` | 生成带图的 RFC 格式 PRD，必须使用 `renhua` | 交付 PRD 内容 |
+| `jn-plan` | 拆子 Issue 草案、依赖和验收条件 | 交付任务内容 |
+| `research` | 针对一个问题独立调研 | 交付笔记及适用的报告 |
+| `renhua` | 中文写作编辑，PRD 使用项目文档模式 | 可独立编辑文章或文档 |
 
-各阶段只产内容,不知道文件存哪。单独调用时产出留在对话里;要落盘走 `/jn`。
+Research 可单独使用，也可以在 JN 任一阶段按需调用。研究完成后返回原阶段，不必走完需求流程。内容阶段单独调用不会自动发布 Issues 或启动实施。
+
+### PRD
+
+采用 [InnerSource Commons 中文 RFC 模板](https://patterns.innersourcecommons.org/zh/fu-lu/e-wai/rfc)，保留原章节顺序，补充本次范围、验收标准和确认记录。
+
+PRD 必须有解释需求的图，默认使用 Mermaid：主流程图说明使用过程；涉及模块、调用顺序、生命周期或迁移时，补关系图、时序图、状态图或前后对照。图放在相关正文旁，验证渲染和文字一致性，不另建 HTML PRD。
+
+每次生成或实质修改 PRD 都必须应用 `renhua` 项目文档模式，再复核图示、术语、风险和验收条件。`renhua` 缺失或图示未验证时保留草稿，不能声称完成。使用 JN 时须同时安装 `jn-grilling`、`jn-intent`、`jn-plan` 和 `renhua`；需要调研时再加载 `research`。
+
+### 实施与验收
+
+PRD 和任务拆分整体确认一次，确认跨会话有效。发布文档与实施代码分别遵循用户授权；已经明确授权就继续，不逐项重复确认。范围或重大风险改变时更新 PRD、图示及受影响任务，并记录新的确认。
+
+每个任务使用独立执行上下文，单次 `/jn` 默认顺序循环。不同会话可以并行处理无依赖任务，开始前核对执行者、前置产物和工作目录冲突。没有独立上下文能力时提供新会话交接，不假装已经隔离。不引入 PR、stack、worktree、看板或自动分支管理。
+
+任务检查通过、证据回写后关闭子 Issue；失败先修复，无法解决则保持打开。用户取消的任务单独记录，不算完成。所有任务处理后，对照父 PRD 做整体验收，通过后才关闭父 Issue。实际复盘完成后再更新 RFC 的回顾记录。
+
+### 本地资料与旧需求
+
+本地保留共享调研 `.jnative/research/<area>/<topic>.md` 和已有术语表，不另存任务状态。Issue 引用可访问的证据，不能只给本机文件路径。
+
+旧 `.jnative/<feature>/` 文件保留，只有用户要求才迁成父子 Issues。迁移后以 GitHub 为准，不继续同步旧文件。GitHub 不可访问时交付草稿并报告限制，不声称已发布。
 
 ## 调研:research
 
-针对一个问题追到一手来源，产出不离开笔记就能复核的 Markdown：每处引证都是链接加原文摘录（源码片段或文档原句），固定一张「来源覆盖」表交代官方文档、作者本人说法、同类方案、issue 讨论和历史演变各查到了什么。机制类问题要求具体走一遍的 trace 和失败模式，对比类要求反方证据，可行性类要求真跑并贴命令输出。需要讲清复杂关系、流程、时间变化、多方案比较或 GitHub issue 讨论时，会额外生成同名的 HTML 报告。HTML 给所有人看，包括不写代码的人，分两层：上层是解释层，每一节按「一句话说清是什么 → 日常类比 → 展开 → 对我们意味着什么」写，术语第一次出现就标出并链到页尾术语表；下层是证据层，把 Markdown 的全部章节、表格、摘录、链接折叠在对应章节下面。页面用 Tailwind CDN 排版，带目录，图放在它解释的章节里，图上的标签用人话。`check_note.py` 检查笔记的结构和摘录，`check_report.py --note` 对照 Markdown 检查 HTML 没有丢内容，并检查每节有人话解释、每个术语有定义。GitHub issue 会区分维护者确认、具体复现案例和普通用户反馈，不把评论数量或表情反应伪装成普遍结论。独立于 `jn` 使用，`jn-grilling` 在事实落在仓库之外时也会调它；走流程时笔记落到 `.jnative/research/`，并从需求说明或计划里链回去。
+针对一个问题追到一手来源，产出不离开笔记就能复核的 Markdown：每处引证都是链接加原文摘录（源码片段或文档原句），固定一张「来源覆盖」表交代官方文档、作者本人说法、同类方案、issue 讨论和历史演变各查到了什么。机制类问题要求具体走一遍的 trace 和失败模式，对比类要求反方证据，可行性类要求真跑并贴命令输出。需要讲清复杂关系、流程、时间变化、多方案比较或 GitHub issue 讨论时，会额外生成同名的 HTML 报告。HTML 给所有人看，包括不写代码的人，分两层：上层是解释层，每一节按「一句话说清是什么 → 日常类比 → 展开 → 对我们意味着什么」写，术语第一次出现就标出并链到页尾术语表；下层是证据层，把 Markdown 的全部章节、表格、摘录、链接折叠在对应章节下面。页面用 Tailwind CDN 排版，带目录，图放在它解释的章节里，图上的标签用人话。`check_note.py` 检查笔记的结构和摘录，`check_report.py --note` 对照 Markdown 检查 HTML 没有丢内容，并检查每节有人话解释、每个术语有定义。GitHub issue 会区分维护者确认、具体复现案例和普通用户反馈，不把评论数量或表情反应伪装成普遍结论。可独立于 `jn` 使用，JN 任一阶段遇到外部事实疑问时也可调用；走流程时笔记落到 `.jnative/research/<area>/<topic>.md`，由父 PRD 或相关任务引用。独立调用遵循目标项目已有的笔记存放约定，不要求创建 JN 需求。
 
 四条核心规则:
 
@@ -31,34 +55,6 @@
 - **把版本钉死。** 源码记 commit SHA,引用用带 SHA 和行号的 permalink;文档记版本号或访问日期。不钉版本,结论过几周就无法复核
 
 产出固定三处:**结论在最前**(编号、自足),**来源覆盖在影响之前**(五行固定的表),**影响在最后**。中间按题目自己命名章节,数量随主题而定。多方案对比、逐维差距、能力矩阵用表格,维度做行、方案做列,单元格里直接嵌带 SHA 的证据链接。
-
-### 工件
-
-```
-<repo>/.jnative/
-├── CONTEXT.md                # 项目术语表,共识对齐用
-├── research/                 # 调研笔记,跨特性共用
-├── archive/                  # 已归档的特性,定位时跳过
-└── <slug>/
-    ├── intent.md             # 问题、期望结果、影响范围、边界
-    ├── plan.md               # 整体方案、关键选择和整套计划是否已确认
-    ├── todo.md               # 工作清单，也是唯一的进度记录
-    └── specs/NN-<slug>.md    # 每项能单独完成、单独检查的工作
-```
-
-### 三个设计取舍
-
-**开始前确认和完成前检查写在 spec 里，不写在 skill 里。** 做一项工作时一定会读它的 spec，但 skill 不一定每次都会加载。spec 模板会要求先说清会长期保存哪些数据、哪个模块维护它们；完成前也必须跑完检查，才能标记为完成。
-
-**把这次必须遵守的项目规则原文摘进 plan 和 spec。** 规则虽然写在 `AGENTS.md` 里，实施时也容易漏掉，因为那时它不一定在当前上下文。只摘这次真正会碰到的条目；整份复制进来等于没有重点。
-
-**todo.md 只当工作清单。** 详情在 spec 里。工作清单一旦塞进太多内容，读它就和读完所有 spec 一样慢。
-
-**plan.md 和 spec 各管一层。** plan 写跨多项工作的整体做法、已经确认的选择、完整的规则/风险和要运行的检查；spec 写某一项工作的范围、用户和调用方能看到的行为、完成前检查和局部选择。spec 里摘出的规则是方便实施时查看，原始内容仍以 plan 为准。
-
-**整套计划只需要确认一次。** 计划完成后，小需求请用户查看 `intent.md + plan.md + todo.md`，大需求再加上全部 specs。`plan.md` 只维护一个「⏳ 等待确认 / ✅ 已确认 · 可执行」状态，不逐个确认工作项。用户回复“确认”“开始”或“继续”后，agent 就按整套计划连续做下去；每完成一项不再停下来重复确认。
-
-**归档要两个条件同时成立**：所有工作都完成，而且用户主动要求归档。不会在需求做完时顺手归档，也不会主动提议，因为归档是把内容移出当前视野，应该由用户决定什么时候做。
 
 ## 写作:renhua
 
@@ -115,6 +111,6 @@ done
 
 ## 致谢
 
-流程设计参考了 [mattpocock/skills](https://github.com/mattpocock/skills) 的调用轴模型(user-invoked 与 model-invoked 的分工)、grilling 的 design tree / frontier 结构,以及 Anthropic 的 [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) 的工件链思路。
+流程设计参考了 [mattpocock/skills](https://github.com/mattpocock/skills) 的调用轴模型(user-invoked 与 model-invoked 的分工)、grilling 的 design tree / frontier 结构,PRD 结构采用 [InnerSource Commons RFC 模板](https://patterns.innersourcecommons.org/zh/fu-lu/e-wai/rfc)，工件链思路参考 Anthropic 的 [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook)。
 
 `research` 的规模分级、派活要素和先宽后窄的检索策略来自 Anthropic 的 [How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system);笔记结构、摘录式引证、来源覆盖表与版本钉死的做法来自自己既有的调研实践;HTML 解释层的「是什么 → 类比 → 展开 → 对你意味着什么」结构和零未定义术语的要求参考了 [dreambigou/eli5](https://github.com/dreambigou/eli5)。
