@@ -29,6 +29,14 @@ PRD 必须有解释需求的图，默认使用 Mermaid：主流程图说明使�
 
 每次生成或实质修改 PRD 都必须应用 `renhua` 项目文档模式，再复核图示、术语、风险和验收条件。`renhua` 缺失或图示未验证时保留草稿，不能声称完成。使用 JN 时须同时安装 `jn-grilling`、`jn-intent`、`jn-plan` 和 `renhua`；需要调研时再加载 `research`。
 
+### 标签
+
+类型使用 `jn:prd`、`jn:task`，每个 Issue 选一个。打开时只保留一个阶段：`jn:clarifying`、`jn:awaiting-confirmation`、`jn:ready`、`jn:in-progress`、`jn:blocked` 或 `jn:review`。
+
+阶段只在 label 中维护，正文保留执行者、工作位置和阻塞原因。确认看父 PRD 的确认记录，依赖看原生关系；ready 标签不能替代授权。关闭时移除阶段标签、保留类型，不增加 done/cancelled 标签。一个子任务阻塞而其他任务仍可推进时，父需求不标 blocked。
+
+日常流程只管理这些 JN 标签；清理旧标签须由用户明确要求，不删除其他项目的分类。不引入优先级、模块或负责人标签，实际负责人使用 assignee。
+
 ### 实施与验收
 
 PRD 和任务拆分整体确认一次，确认跨会话有效。发布文档与实施代码分别遵循用户授权；已经明确授权就继续，不逐项重复确认。范围或重大风险改变时更新 PRD、图示及受影响任务，并记录新的确认。
