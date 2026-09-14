@@ -53,7 +53,13 @@ PRD 和任务拆分整体确认一次，确认跨会话有效。发布文档与�
 
 ## 调研:research
 
-针对一个问题追到一手来源，产出不离开笔记就能复核的 Markdown：每处引证都是链接加原文摘录（源码片段或文档原句），固定一张「来源覆盖」表交代官方文档、作者本人说法、同类方案、issue 讨论和历史演变各查到了什么。机制类问题要求具体走一遍的 trace 和失败模式，对比类要求反方证据，可行性类要求真跑并贴命令输出。需要讲清复杂关系、流程、时间变化、多方案比较或 GitHub issue 讨论时，会额外生成同名的 HTML 报告。HTML 给所有人看，包括不写代码的人，分两层：上层是解释层，每一节按「一句话说清是什么 → 日常类比 → 展开 → 对我们意味着什么」写，术语第一次出现就标出并链到页尾术语表；下层是证据层，把 Markdown 的全部章节、表格、摘录、链接折叠在对应章节下面。页面用 Tailwind CDN 排版，带目录，图放在它解释的章节里，图上的标签用人话。`check_note.py` 检查笔记的结构和摘录，`check_report.py --note` 对照 Markdown 检查 HTML 没有丢内容，并检查每节有人话解释、每个术语有定义。GitHub issue 会区分维护者确认、具体复现案例和普通用户反馈，不把评论数量或表情反应伪装成普遍结论。可独立于 `jn` 使用，JN 任一阶段遇到外部事实疑问时也可调用；走流程时笔记落到 `.jnative/research/<area>/<topic>.md`，由父 PRD 或相关任务引用。独立调用遵循目标项目已有的笔记存放约定，不要求创建 JN 需求。
+针对一个问题追到一手来源，默认产出带来源链接和原文摘录的 Markdown 笔记。Research 可独立使用，JN 任一阶段也可以按需调用；独立调研不自动创建需求或实施任务。
+
+只有用户明确要求 HTML 或网页报告时，才额外生成 HTML。“调研报告”“讲清楚”“加图”、复杂流程或 GitHub 讨论都不自动触发网页。HTML 按用户的问题重新组织：先给答案和条件，再用实际场景解释过程，最后说明对项目的建议与限制。可以合并章节、筛选结论，不能省略会改变判断的反证；完整源码、摘录和检索记录留在 Markdown，不全文搬进折叠区。
+
+HTML 默认使用内嵌 CSS，正文和图表可离线阅读。`check_note.py` 检查笔记结构和引证；`check_report.py --note` 检查报告来源能否追溯到笔记，不要求两者标题、顺序、表格或结论数量一致。报告还需检查实际场景是否讲清，并做桌面与窄屏预览；脚本通过不代表报告好懂。
+
+JN 调用时笔记放在 `.jnative/research/<area>/<topic>.md`，由 PRD 或任务引用；独立调用遵循项目已有存放约定。GitHub 讨论仍区分维护者确认、复现案例和普通反馈，不把评论数量当作普遍结论。
 
 四条核心规则:
 
@@ -121,4 +127,4 @@ done
 
 流程设计参考了 [mattpocock/skills](https://github.com/mattpocock/skills) 的调用轴模型(user-invoked 与 model-invoked 的分工)、grilling 的 design tree / frontier 结构,PRD 结构采用 [InnerSource Commons RFC 模板](https://patterns.innersourcecommons.org/zh/fu-lu/e-wai/rfc)，工件链思路参考 Anthropic 的 [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook)。
 
-`research` 的规模分级、派活要素和先宽后窄的检索策略来自 Anthropic 的 [How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system);笔记结构、摘录式引证、来源覆盖表与版本钉死的做法来自自己既有的调研实践;HTML 解释层的「是什么 → 类比 → 展开 → 对你意味着什么」结构和零未定义术语的要求参考了 [dreambigou/eli5](https://github.com/dreambigou/eli5)。
+`research` 的规模分级、派活要素和先宽后窄的检索策略来自 Anthropic 的 [How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system);笔记结构、摘录式引证、来源覆盖表与版本钉死的做法来自自己既有的调研实践;HTML 的通俗解释思路曾参考 [dreambigou/eli5](https://github.com/dreambigou/eli5)。
