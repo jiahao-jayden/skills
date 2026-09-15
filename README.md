@@ -32,9 +32,11 @@ PRD 必须有解释需求的图，默认使用 Mermaid：主流程图说明使�
 
 ### Tracker 与状态
 
-GitHub 模式把父 PRD、子任务、执行证据和状态写入 Issues、评论、关系和 labels。本地模式把父 PRD 和编号任务写入 `.jnative/task/<feature>/`，使用 frontmatter 保存类型、阶段、开关状态和关闭原因，文件链接保存父子关系与依赖。
+GitHub 模式把父 PRD、子任务、执行证据和状态写入 Issues、评论、关系和 labels。本地模式把打开的父 PRD 和编号任务写入 `.jnative/task/<feature>/`，使用 frontmatter 保存类型、阶段、开关状态和关闭原因，文件链接保存父子关系与依赖。local 父需求关闭后按当天日期移入 `.jnative/archive/YYYY-MM-DD/<feature>/`。
 
-`/jn-setup` 只写并验证 `.jnative/issue-tracker.md`，不创建任务或迁移旧记录；成功后删除当前安装项，源码仓库不删。普通 JN 不加载 setup；配置缺失时，有可写 GitHub remote 就使用 GitHub，否则使用本地。GitHub 在首次写入前确认不可用时自动切到本地；远端结果不明或已部分创建时不会双写。
+两种模式都维护 `.jnative/task/index.md` 和 `history.md` 作为轻量导航，只记录父需求标题、阶段或结果、tracker 链接、更新时间和旧本地资料路径，不复制正文或执行证据。日常恢复只读当前索引，查询历史时才读历史视图。
+
+`/jn-setup` 写入并验证 `.jnative/issue-tracker.md`，再用父需求元数据初始化轻量视图；不创建任务或迁移旧记录，成功后删除当前安装项，源码仓库不删。普通 JN 不加载 setup；配置缺失时，有可写 GitHub remote 就使用 GitHub，否则使用本地。GitHub 在首次写入前确认不可用时自动切到本地；远端结果不明或已部分创建时不会双写。
 
 GitHub 类型使用 `jn:prd`、`jn:task`；本地使用等价的 `jn_type`。打开时只保留一个阶段：`clarifying`、`awaiting-confirmation`、`ready`、`in-progress`、`blocked` 或 `review`。
 
@@ -52,7 +54,7 @@ PRD 和任务拆分整体确认一次，确认跨会话有效。发布文档与�
 
 ### 本地资料与旧需求
 
-本地可保留显式 tracker 配置、local 模式的正式任务记录、共享调研 `.jnative/research/<area>/<topic>.md` 和已有术语表。GitHub 模式不另存任务状态；Issue 引用可访问的证据，不能只给本机文件路径。
+本地可保留显式 tracker 配置、轻量任务视图、local 模式的正式任务记录、按日期归档的历史记录、共享调研 `.jnative/research/<area>/<topic>.md` 和已有术语表。GitHub 模式不另存任务正文或状态；Issue 引用可访问的证据，不能只给本机文件路径。
 
 旧 `.jnative/<feature>/` 文件保留，只有用户要求才迁入配置的 tracker。迁移后只维护目标 tracker，不继续同步旧文件。
 
