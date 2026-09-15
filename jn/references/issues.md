@@ -12,7 +12,7 @@ fallback: local
 `tracker` 只接受 `github` 或 `local`，`fallback` 只接受 `local`。GitHub 仓库从 remote 获取，不在配置中复制。配置由 `jn-setup` 显式维护；普通 JN 不调用 setup、不创建或修改配置。配置不存在时，GitHub remote 明确且可访问则使用 GitHub，否则使用本地；fallback 始终是本地。
 
 - `github`：父 PRD 和任务是 GitHub Issues，状态由 Issue、label、关系和评论承载。
-- `local`：父 PRD 和任务是 `.jnative/issues/<feature>/` 下的 Markdown，状态由 frontmatter、链接和执行记录承载。
+- `local`：父 PRD 和任务是 `.jnative/task/<feature>/` 下的 Markdown，状态由 frontmatter、链接和执行记录承载。
 - 已有父记录时沿用它所在的 tracker。切换已有需求须明确迁移，不能双写或持续同步。
 
 GitHub 在创建任何对象前确认无 remote、无连接或无写权限时，本次运行改用本地；不自动创建或修改配置。超时、部分创建或结果不明时先按下文恢复；未确认远端没有对象前不得回退，避免产生两套记录。
@@ -42,9 +42,9 @@ GitHub 在创建任何对象前确认无 remote、无连接或无写权限时，
 每个需求一个目录，不创建汇总数据库：
 
 ```text
-.jnative/issues/<feature-slug>/prd.md
-.jnative/issues/<feature-slug>/tasks/01-<task-slug>.md
-.jnative/issues/<feature-slug>/tasks/02-<task-slug>.md
+.jnative/task/<feature-slug>/prd.md
+.jnative/task/<feature-slug>/01-<task-slug>.md
+.jnative/task/<feature-slug>/02-<task-slug>.md
 ```
 
 `prd.md` 使用 RFC 正文，并在最前面添加：

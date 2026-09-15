@@ -20,13 +20,13 @@ JN 用父记录保存 RFC 格式的 PRD，用子任务记录管理任务和依�
 
 ## Tracker 配置
 
-`.jnative/issue-tracker.md` 是可选配置，由用户显式运行 `jn-setup` 创建或修改；普通 JN 不调用 setup、不创建配置。配置存在时按配置执行；不存在时使用内置默认值：GitHub remote 明确且可访问则用 GitHub，否则用本地，fallback 固定为本地。配置为 GitHub 时从 remote 确定仓库，多个合理目标时询问；配置为本地时使用 `.jnative/issues/`。具体格式、回退和迁移规则见 [Tracker 操作约定](references/issues.md)。
+`.jnative/issue-tracker.md` 是可选配置，由用户显式运行 `jn-setup` 创建或修改；普通 JN 不调用 setup、不创建配置。配置存在时按配置执行；不存在时使用内置默认值：GitHub remote 明确且可访问则用 GitHub，否则用本地，fallback 固定为本地。配置为 GitHub 时从 remote 确定仓库，多个合理目标时询问；配置为本地时使用 `.jnative/task/`。具体格式、回退和迁移规则见 [Tracker 操作约定](references/issues.md)。
 
 同一需求只使用一个正式 tracker。已有父记录决定该需求继续写 GitHub 还是本地，不能因暂时失败同时维护两份；切换已有需求必须由用户明确要求迁移。
 
 ## 定位和读取
 
-接受 GitHub 父/子 Issue 的链接、编号，或 `.jnative/issues/` 下的父需求、任务路径。GitHub 编号必须绑定明确的仓库。不得把当前 skills 仓库当成所有需求的目标。
+接受 GitHub 父/子 Issue 的链接、编号，或 `.jnative/task/` 下的父需求、任务路径。GitHub 编号必须绑定明确的仓库。不得把当前 skills 仓库当成所有需求的目标。
 
 未指定任务时从配置的 tracker 列相关父需求。只有一个合理候选就用它，多个候选列标题、进度和最近活动供用户选择；不要把所有打开记录都当成 JN 任务。新需求进入澄清。
 

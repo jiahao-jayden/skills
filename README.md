@@ -32,7 +32,7 @@ PRD 必须有解释需求的图，默认使用 Mermaid：主流程图说明使�
 
 ### Tracker 与状态
 
-GitHub 模式把父 PRD、子任务、执行证据和状态写入 Issues、评论、关系和 labels。本地模式写入 `.jnative/issues/<feature>/prd.md` 与 `tasks/<NN>-<slug>.md`，使用 frontmatter 保存类型、阶段、开关状态和关闭原因，文件链接保存父子关系与依赖。
+GitHub 模式把父 PRD、子任务、执行证据和状态写入 Issues、评论、关系和 labels。本地模式把父 PRD 和编号任务写入 `.jnative/task/<feature>/`，使用 frontmatter 保存类型、阶段、开关状态和关闭原因，文件链接保存父子关系与依赖。
 
 `/jn-setup` 只写并验证 `.jnative/issue-tracker.md`，不创建任务或迁移旧记录；成功后删除当前安装项，源码仓库不删。普通 JN 不加载 setup；配置缺失时，有可写 GitHub remote 就使用 GitHub，否则使用本地。GitHub 在首次写入前确认不可用时自动切到本地；远端结果不明或已部分创建时不会双写。
 

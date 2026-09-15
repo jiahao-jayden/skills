@@ -9,7 +9,7 @@ description: "一次性配置 JN 使用 GitHub 或本地任务 tracker，成功�
 
 ## 检查
 
-读取现有配置、`git remote` 和 `.jnative/issues/`。配置为 GitHub 或准备切到 GitHub 时，确认 remote 唯一且 GitHub 可访问；只做读取检查，不创建 Issue、label 或其他远端对象。
+读取现有配置、`git remote` 和 `.jnative/task/`。配置为 GitHub 或准备切到 GitHub 时，确认 remote 唯一且 GitHub 可访问；只做读取检查，不创建 Issue、label 或其他远端对象。
 
 已有 GitHub JN Issues 或本地父需求时说明它们仍留在原 tracker。setup 只决定新需求的默认 tracker，不迁移、复制或同步已有记录。
 
