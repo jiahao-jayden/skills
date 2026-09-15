@@ -1,0 +1,7 @@
+interface:
+  display_name: "JN Setup"
+  short_description: "一次性配置 JN tracker，成功后自动删除"
+  default_prompt: "Use $jn-setup to configure this repository's JN tracker."
+
+policy:
+  allow_implicit_invocation: false

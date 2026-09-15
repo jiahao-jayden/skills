@@ -6,20 +6,21 @@
 
 ## 流程:jn
 
-用 GitHub Issues 管理需求和实施：**Grill → PRD → 子 Issues 与依赖 → Implement → Review**。一项任务也走同样的流程。
+用可配置的 GitHub 或本地 tracker 管理需求和实施：**Grill → PRD → 子任务与依赖 → Implement → Review**。一项任务也走同样的流程。
 
-`/jn` 接受父或子 Issue 链接、编号，读取需求、确认和进度，再恢复对应阶段。父 Issue 保存 RFC 格式 PRD；子 Issue 保存任务、执行信息和检查证据。GitHub 是任务状态的唯一来源，不再生成本地 intent/plan/todo/spec。
+`/jn` 接受 GitHub Issue 或本地任务路径，读取需求、确认和进度，再恢复对应阶段。通过 `/jn-setup` 可把默认 tracker 配置为 `github` 或 `local`；没有配置时使用内置默认值，GitHub 不可用则回退本地。同一需求只维护一套正式状态。
 
 | skill | 职责 | 单独调用 |
 |---|---|---|
-| `jn` | Issue 定位、发布、确认、实施调度和整体验收 | 手动入口 |
+| `jn` | Tracker 定位、发布、确认、实施调度和整体验收 | 可主动触发 |
+| `jn-setup` | 一次性配置 tracker，成功后自删除 | 显式入口 |
 | `jn-grilling` | 分轮追问场景、边界和重要取舍 | 交付决定清单 |
 | `jn-intent` | 生成带图的 RFC 格式 PRD，必须使用 `renhua` | 交付 PRD 内容 |
-| `jn-plan` | 拆子 Issue 草案、依赖和验收条件 | 交付任务内容 |
+| `jn-plan` | 拆子任务草案、依赖和验收条件 | 交付任务内容 |
 | `research` | 针对一个问题独立调研 | 交付笔记及适用的报告 |
 | `renhua` | 中文写作编辑，PRD 使用项目文档模式 | 可独立编辑文章或文档 |
 
-Research 可单独使用，也可以在 JN 任一阶段按需调用。研究完成后返回原阶段，不必走完需求流程。内容阶段单独调用不会自动发布 Issues 或启动实施。
+Research 可单独使用，也可以在 JN 任一阶段按需调用。研究完成后返回原阶段，不必走完需求流程。内容阶段单独调用不会自动发布 tracker 记录或启动实施。
 
 ### PRD
 
@@ -29,11 +30,15 @@ PRD 必须有解释需求的图，默认使用 Mermaid：主流程图说明使�
 
 每次生成或实质修改 PRD 都必须应用 `renhua` 项目文档模式，再复核图示、术语、风险和验收条件。`renhua` 缺失或图示未验证时保留草稿，不能声称完成。使用 JN 时须同时安装 `jn-grilling`、`jn-intent`、`jn-plan` 和 `renhua`；需要调研时再加载 `research`。
 
-### 标签
+### Tracker 与状态
 
-类型使用 `jn:prd`、`jn:task`，每个 Issue 选一个。打开时只保留一个阶段：`jn:clarifying`、`jn:awaiting-confirmation`、`jn:ready`、`jn:in-progress`、`jn:blocked` 或 `jn:review`。
+GitHub 模式把父 PRD、子任务、执行证据和状态写入 Issues、评论、关系和 labels。本地模式写入 `.jnative/issues/<feature>/prd.md` 与 `tasks/<NN>-<slug>.md`，使用 frontmatter 保存类型、阶段、开关状态和关闭原因，文件链接保存父子关系与依赖。
 
-阶段只在 label 中维护，正文保留执行者、工作位置和阻塞原因。确认看父 PRD 的确认记录，依赖看原生关系；ready 标签不能替代授权。关闭时移除阶段标签、保留类型，不增加 done/cancelled 标签。一个子任务阻塞而其他任务仍可推进时，父需求不标 blocked。
+`/jn-setup` 只写并验证 `.jnative/issue-tracker.md`，不创建任务或迁移旧记录；成功后删除当前安装项，源码仓库不删。普通 JN 不加载 setup；配置缺失时，有可写 GitHub remote 就使用 GitHub，否则使用本地。GitHub 在首次写入前确认不可用时自动切到本地；远端结果不明或已部分创建时不会双写。
+
+GitHub 类型使用 `jn:prd`、`jn:task`；本地使用等价的 `jn_type`。打开时只保留一个阶段：`clarifying`、`awaiting-confirmation`、`ready`、`in-progress`、`blocked` 或 `review`。
+
+GitHub 阶段用 label，本地阶段用 frontmatter；正文保留执行者、工作位置和阻塞原因。确认看父 PRD，依赖看原生关系或文件链接；ready 不能替代授权。一个子任务阻塞而其他任务仍可推进时，父需求不标 blocked。
 
 日常流程只管理这些 JN 标签；清理旧标签须由用户明确要求，不删除其他项目的分类。不引入优先级、模块或负责人标签，实际负责人使用 assignee。
 
@@ -43,13 +48,13 @@ PRD 和任务拆分整体确认一次，确认跨会话有效。发布文档与�
 
 每个任务使用独立执行上下文，单次 `/jn` 默认顺序循环。不同会话可以并行处理无依赖任务，开始前核对执行者、前置产物和工作目录冲突。没有独立上下文能力时提供新会话交接，不假装已经隔离。不引入 PR、stack、worktree、看板或自动分支管理。
 
-任务检查通过、证据回写后关闭子 Issue；失败先修复，无法解决则保持打开。用户取消的任务单独记录，不算完成。所有任务处理后，对照父 PRD 做整体验收，通过后才关闭父 Issue。实际复盘完成后再更新 RFC 的回顾记录。
+任务检查通过、证据回写后关闭子任务；失败先修复，无法解决则保持打开。用户取消的任务单独记录，不算完成。所有任务处理后，对照父 PRD 做整体验收，通过后才关闭父需求。实际复盘完成后再更新 RFC 的回顾记录。
 
 ### 本地资料与旧需求
 
-本地保留共享调研 `.jnative/research/<area>/<topic>.md` 和已有术语表，不另存任务状态。Issue 引用可访问的证据，不能只给本机文件路径。
+本地可保留显式 tracker 配置、local 模式的正式任务记录、共享调研 `.jnative/research/<area>/<topic>.md` 和已有术语表。GitHub 模式不另存任务状态；Issue 引用可访问的证据，不能只给本机文件路径。
 
-旧 `.jnative/<feature>/` 文件保留，只有用户要求才迁成父子 Issues。迁移后以 GitHub 为准，不继续同步旧文件。GitHub 不可访问时交付草稿并报告限制，不声称已发布。
+旧 `.jnative/<feature>/` 文件保留，只有用户要求才迁入配置的 tracker。迁移后只维护目标 tracker，不继续同步旧文件。
 
 ## 调研:research
 
