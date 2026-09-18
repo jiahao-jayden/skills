@@ -36,7 +36,7 @@ GitHub 模式把父 PRD、子任务、执行证据和状态写入 Issues、评�
 
 两种模式都维护 `.jnative/task/index.md` 和 `history.md` 作为轻量导航，只记录父需求标题、阶段或结果、tracker 链接、更新时间和旧本地资料路径，不复制正文或执行证据。日常恢复只读当前索引，查询历史时才读历史视图。
 
-`/jn-setup` 写入并验证 `.jnative/issue-tracker.md`，再用父需求元数据初始化轻量视图；不创建任务或迁移旧记录，成功后删除当前安装项，源码仓库不删。普通 JN 不加载 setup；配置缺失时，有可写 GitHub remote 就使用 GitHub，否则使用本地。GitHub 在首次写入前确认不可用时自动切到本地；远端结果不明或已部分创建时不会双写。
+`/jn-setup` 写入并验证 `.jnative/issue-tracker.md`，GitHub 模式固定带 `github_client: gh`，再用父需求元数据初始化轻量视图；不创建任务或迁移旧记录，成功后删除当前安装项，源码仓库不删。普通 JN 不加载 setup；配置缺失时，有可写 GitHub remote 就使用 GitHub 且只用 `gh`，否则使用本地。GitHub 在首次写入前确认不可用时自动切到本地，不改走 GitHub connector；远端结果不明或已部分创建时不会双写。
 
 GitHub 类型使用 `jn:prd`、`jn:task`；本地使用等价的 `jn_type`。打开时只保留一个阶段：`clarifying`、`awaiting-confirmation`、`ready`、`in-progress`、`blocked` 或 `review`。
 

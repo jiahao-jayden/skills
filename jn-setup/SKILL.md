@@ -26,9 +26,10 @@ description: "一次性配置 JN 使用 GitHub 或本地任务 tracker，成功�
 ```markdown
 tracker: github
 fallback: local
+github_client: gh
 ```
 
-`tracker` 只允许 `github` 或 `local`，`fallback` 只允许 `local`。保留文件中不冲突的用户说明；无关项目文件不改。
+`tracker` 只允许 `github` 或 `local`，`fallback` 只允许 `local`。`tracker: github` 时必须写入 `github_client: gh`，不提供 connector 或其他 client 选项。`tracker: local` 时不写 `github_client`。保留文件中不冲突的用户说明；无关项目文件不改。
 
 同时创建或刷新：
 
@@ -49,4 +50,4 @@ fallback: local
 - 配置写入或验证失败时保留 skill，便于重试。
 - 不删除 `.jnative/issue-tracker.md`、视图、其他 skills 或已有 tracker 记录。
 
-完成后报告配置路径、主 tracker、fallback、视图路径和自删除结果。以后要改配置时重新安装 `jn-setup`，或由用户直接编辑配置文件。
+完成后报告配置路径、主 tracker、fallback、`github_client`（GitHub 模式）、视图路径和自删除结果。以后要改配置时重新安装 `jn-setup`，或由用户直接编辑配置文件。
